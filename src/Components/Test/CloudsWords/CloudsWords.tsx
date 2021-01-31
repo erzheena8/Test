@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import classes from './CloudsWords.module.sass'
 import {PhraseEnType} from "../../../App";
-import {Cloud} from "./Cloud/Cloud";
-import {CloudContainer} from "./Cloud/CloudContainer";
+import {CloudContainer} from "../Cloud/CloudContainer";
 
 type CloudsWordsPropsType = {
     words: Array<PhraseEnType>

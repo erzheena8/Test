@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import classes from './PutWords.module.sass'
 import {PhraseEnType} from "../../../App";
-import {CloudContainer} from "../CloudsWords/Cloud/CloudContainer";
+import {CloudContainer} from "../Cloud/CloudContainer";
 
 type PutWordsPropsType = {
     currentValue: PhraseEnType | null
@@ -30,6 +30,7 @@ export const PutWords: React.FC<PutWordsPropsType> = ({currentValue, setCurrentW
                 <CloudContainer currentValue={currentValue} setCurrentWord={setCurrentWord} words={wordsList}
                                 setWords={setWordsList} setAnswer={setAnswer}/>
             </div>
+            <div className={classes.putItem}></div>
             <div className={classes.putItem}></div>
         </div>
     );

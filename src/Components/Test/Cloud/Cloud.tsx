@@ -1,6 +1,6 @@
 import React from 'react'
 import classes from './Cloud.module.sass'
-import {PhraseEnType} from "../../../../App";
+import {PhraseEnType} from "../../../App";
 
 type CloudPropsType = {
     word: PhraseEnType

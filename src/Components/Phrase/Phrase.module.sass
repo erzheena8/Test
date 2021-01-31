@@ -1,3 +1,6 @@
+$colorBlock: #62639B
+
+
 .phrase
   width: 100%
   display: flex
@@ -12,6 +15,25 @@
     min-width: 10%
     max-width: 50%
     height: 5%
-    padding: 5px
-    border: 1px solid black
-      radius: 10px
+    padding: 10px
+    background-color: $colorBlock
+    border-radius: 10px
+    position: relative
+    color: white
+    z-index: 0
+
+    &::before
+      content: ''
+      position: absolute
+      width: 30px
+      height: 25px
+      background-color: $colorBlock
+      bottom: 10px
+      left: -5px
+      transform: rotate(45deg)
+      z-index: -1
+
+
+
+
+

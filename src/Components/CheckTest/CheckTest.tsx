@@ -15,7 +15,7 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
     {sentence, resultSentence,answer, setAnswer, ...otherProps}) => {
     const [checkCorrect, setCheckCorrect] = useState<boolean>(false)
     const setValue = () => {
-        setAnswer('error')
+        setAnswer('Something wrong!')
         setCheckCorrect(false)
     }
     console.log(otherProps.disabled)
@@ -31,7 +31,7 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
                 return
             }
         }
-        setAnswer('Ok!')
+        setAnswer('Correct!')
         setCheckCorrect(true)
         speechSynthesis.speak(new SpeechSynthesisUtterance(sentence.join(' ')))
     }

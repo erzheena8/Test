@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Cloud} from "./Cloud";
-import {PhraseEnType} from "../../../../App";
+import {PhraseEnType} from "../../../App";
 
 type CloudContainerPropsType = {
     currentValue: PhraseEnType | null
