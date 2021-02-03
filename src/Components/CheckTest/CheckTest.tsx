@@ -1,49 +1,62 @@
 import React, {useEffect, useState} from 'react'
 import classes from './CheckTest.module.sass'
+import {PhraseEnType, SetAnswerType} from "../../App";
 
 
 type CheckTestPropsType = {
-    sentence: Array<string>
-    resultSentence: string
-    answer:string
-    setAnswer: (answer:string)=>void
-    disabled: boolean
+    checkSentence: string
+    resultSentence: Array<PhraseEnType>
+    answer: SetAnswerType
+    setAnswer: (answer: SetAnswerType) => void
+    // disabled: boolean
 
 }
 
 export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
-    {sentence, resultSentence,answer, setAnswer, ...otherProps}) => {
-    const [checkCorrect, setCheckCorrect] = useState<boolean>(false)
-    const setValue = () => {
-        setAnswer('Something wrong!')
-        setCheckCorrect(false)
+    {
+        checkSentence,
+        resultSentence,
+        ...otherProps
+    }) => {
+    const [disabled, setDisabled] = useState<boolean>(true)
+    useEffect(()=> {
+        if (resultSentence.length === 0) setDisabled(true)
+        else setDisabled(false)
+    }, [resultSentence])
+    const setValue = (check: boolean) => {
+        check
+            ? otherProps.setAnswer({answer: 'This is not true', error: true})
+            : otherProps.setAnswer({answer: 'Correct', error: false})
+        setDisabled(true)
     }
-    console.log(otherProps.disabled)
     const checkResult = () => {
-        let result = resultSentence.split(' ')
-        if (result.length !== sentence.length) {
-            setValue()
+        let result = checkSentence.split(' ')
+        if (result.length !== resultSentence.length) {
+            setValue(true)
             return
         }
-        for(let i=0; i<result.length; i++) {
-            if (result[i] !== sentence[i]) {
-                setValue()
+        for (let i = 0; i < resultSentence.length; i++) {
+            if (result[i] !== resultSentence[i].word) {
+                setValue(true)
                 return
             }
+
         }
-        setAnswer('Correct!')
-        setCheckCorrect(true)
-        speechSynthesis.speak(new SpeechSynthesisUtterance(sentence.join(' ')))
+        setValue(false)
+        setDisabled(false)
+        speechSynthesis.speak(new SpeechSynthesisUtterance(result.join(' ')))
     }
+
+
 
     return (
         <div className={classes.checkTest}>
-            <div className={`${classes.answerCheck} ${checkCorrect?classes.correct:classes.error}`} >
-                {answer && answer}
-            </div>
+            {otherProps.answer.answer &&
+            <div className={`${classes.answerCheck} ${otherProps.answer.error ? classes.error : classes.correct}`}>
+                {otherProps.answer.answer}
+            </div>}
             <div className={classes.buttonCheck}>
-                <button onClick={checkResult} onBlur={()=>{
-                    setTimeout(()=>{setAnswer('')},0)}} disabled={otherProps.disabled||Boolean(answer)}>
+                <button onClick={checkResult} disabled={disabled}>
                     Check
                 </button>
             </div>

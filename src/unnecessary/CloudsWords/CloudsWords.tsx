@@ -1,49 +1,91 @@
 import React, {useEffect, useState} from 'react'
 import classes from './CloudsWords.module.sass'
-import {PhraseEnType} from "../../../App";
-import {CloudContainer} from "../Cloud/CloudContainer";
+import {PhraseEnType} from "../../App";
+import {CloudContainer} from "../CloudContainer";
+import {DragSource, useDrag} from "react-dnd";
+import {ItemType} from "../../utils/item";
+import {Cloud} from "../../Components/Test/Cloud/Cloud";
 
 type CloudsWordsPropsType = {
     words: Array<PhraseEnType>
     setCurrentWord: (currentWord: PhraseEnType | null) => void
     currentValue: (PhraseEnType | null)
-    setAnswer: (answer:string)=>void
-
+    setAnswer: (answer: string) => void
+    currentWordCloud: PhraseEnType | null
+    pageY: number
 }
 
+
 export const CloudsWords: React.FC<CloudsWordsPropsType> =
-    ({words, setCurrentWord, currentValue,setAnswer}) => {
+    ({words, setCurrentWord, currentValue, setAnswer, ...otherProps}) => {
         const [wordsListCloud, setWordsListCloud] = useState<Array<PhraseEnType>>([])
+
+        // const [emptyWords, setEmptyWords] = useState<Array<number>>([])
         useEffect(() => {
             setWordsListCloud([...words])
+            //@ts-ignore
+            // param = words.map(w=>{
+            //     if (typeof(w.id)==="number") {
+            //         return w.id
+            //     }
+            //     })
+            // if (param.length % 5 !== 0) {
+            //     while (param.length % 5 !== 0) {
+            //         param.push(param.length)
+            //     }
+            // }
+
         }, [words])
-        useEffect(()=>{
-            const sortingCloudWords = (a:PhraseEnType, b:PhraseEnType) => {
-                if(a.position<b.position) {
-                    return -1
-                }
-                if(a.id>b.id) {
-                    return 1
-                }
-                return 0
-            }
-            setWordsListCloud(wordsListCloud.sort(sortingCloudWords))
+        useEffect(() => {
+            // if (wordsListCloud.length % 5 !== 0) {
+            //     if (otherProps.currentWordCloud) {
+            //         // debugger
+            //         setWordsListCloud([...wordsListCloud, {id: null, position: null, word: null}])
+            //     }
+            // if (currentValue) {
+            //     let arr = wordsListCloud
+            //     let index = arr.indexOf({id: null, position: null, word:null})
+            //     console.log(index)
+            //     arr.splice(arr.length-2,1)
+            //     setWordsListCloud([...arr])
+            //
+            // }
+            // if (otherProps.currentWordPut) {
+            //     setWordsListCloud(wordsListCloud.filter(wl=>{
+            //         if (wl.id!==null) return wl
+            //         else return
+            //     }))
+            // }
+            // }
+            // const sortingCloudWords = (a:PhraseEnType, b:PhraseEnType) => {
+            //     if(a.position<b.position) {
+            //         return -1
+            //     }
+            //     if(a.id>b.id) {
+            //         return 1
+            //     }
+            //     return 0
+            // }
+            // setWordsListCloud(wordsListCloud.sort(sortingCloudWords))
         }, [wordsListCloud])
 
         return (
             <div className={classes.clouds}>
-                <CloudContainer
-                    currentValue={currentValue}
-                    setCurrentWord={setCurrentWord}
-                    words={wordsListCloud}
-                    setWords={setWordsListCloud}
-                    setAnswer={setAnswer}
-                />
+
+                {/*<CloudContainer*/}
+                {/*    ref = {drag} //dnd*/}
+                {/*    opacity = {isDragging?'0.5':'1'}*/}
+                {/*    currentValue={currentValue}*/}
+                {/*    setCurrentWord={setCurrentWord}*/}
+                {/*    words={wordsListCloud}*/}
+                {/*    setWords={setWordsListCloud}*/}
+                {/*    setAnswer={setAnswer}*/}
+                {/*    pageY={otherProps.pageY}*/}
+                {/*/>*/}
             </div>
         );
 
     }
-
 
 // export const CloudsWords: React.FC<CloudsWordsPropsType> =
 //     ({words}) => {
