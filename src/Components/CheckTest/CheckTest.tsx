@@ -8,7 +8,6 @@ type CheckTestPropsType = {
     resultSentence: Array<PhraseEnType>
     answer: SetAnswerType
     setAnswer: (answer: SetAnswerType) => void
-    // disabled: boolean
 
 }
 
@@ -23,6 +22,10 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
         if (resultSentence.length === 0) setDisabled(true)
         else setDisabled(false)
     }, [resultSentence])
+
+    useEffect(()=> {
+        if (!otherProps.answer.answer) setDisabled(false)
+    }, [otherProps.answer])
     const setValue = (check: boolean) => {
         check
             ? otherProps.setAnswer({answer: 'This is not true', error: true})

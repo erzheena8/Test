@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import classes from './Test.module.sass'
 import {PhraseEnType} from "../../App";
 import {PutResult} from "./ResultPhrase/PutResult";
@@ -8,6 +8,8 @@ import {PutClouds} from "./SetOfWords/PutClouds";
 type TestPropsType = {
     words: Array<PhraseEnType>
     resultSentence: Array<PhraseEnType>
+    f: boolean
+    setPhrase:(phrase: Array<PhraseEnType>)=> void
     // setSentence: (resultSentence: Array<string>) => void
     // setDisabled: (disabled: boolean) => void
 }
@@ -15,11 +17,14 @@ type TestPropsType = {
 export const Test: React.FC<TestPropsType> = React.memo((
     {words,
         resultSentence,
+        setPhrase,
         // setSentence,
         // setAnswer,
         ...otherProps}) => {
-    const [currentWordCloud, setCurrentWordCloud] = useState<PhraseEnType | null>(null)
-    const [currentWordPut, setCurrentWordPut] = useState<PhraseEnType | null>(null)
+    const [wordsCloud, setWordsCloud] = useState<Array<PhraseEnType>>([])
+    // const [currentWordPut, setCurrentWordPut] = useState<PhraseEnType | null>(null)
+
+
     return (
         <div className={classes.test}>
             <PutResult words={resultSentence} />

@@ -31,9 +31,8 @@ function App() {
 
     const [phrase, setPhrase] = useState<Array<PhraseEnType>>([]),
         [resultSentence, setResultSentence] = useState<Array<PhraseEnType>>([]),
-        [cloudSentence, setCloudSentence] = useState<Array<PhraseEnType>>([]),
+        [f, setF] = useState<boolean>(true),
         [answer, setAnswer] = useState<SetAnswerType>({answer: '', error: false})
-
 
     const mixWords = (phrase: string, randomWords: Array<string>) => {
         const words = phrase.split(' '),
@@ -63,82 +62,57 @@ function App() {
         setPhrase(newWords)
     }, [])
 
-
-    // const putWordResult = (id: number) => {
-    //     let dragWord = phrase.map(p => {
-    //         if (p.id === id && p.status === 'cloud') {
-    //             p.status = 'result'
-    //             setResultSentence([...resultSentence, p])
-    //         } else if (p.id === id && p.status === 'result') {
-    //             p.status = 'cloud'
-    //             setResultSentence(resultSentence.filter(p => {
-    //                 if (p.id !== id) return p
-    //             }))
-    //             setCloudSentence([...cloudSentence, p])
-    //         }
-    //         return p
-    //     })
-    //     setPhrase(dragWord)
-    // }
-    const putWord = (id: number, status: string, setResult: Function) => {
-        let dragWord = phrase.map(p => {
-            if (p.id === id) {
-                p.status = status
-                setResult(p)
-            }
-            return p
-        })
-        setPhrase(dragWord)
-        setAnswer({answer: '', error: false})
+    useEffect(() => {
+        const len = phrase.length
+        if (len > 0) {
+            if (phrase[len - 2].position > phrase[len - 1].position) {
+                setF(false)
+            } else setF(true)
+        }
+    }, [phrase])
+    const sorting = () => {
+        setPhrase(phrase.sort((a: PhraseEnType, b: PhraseEnType) => {
+            if (a.position < b.position) return -1
+            if (a.position > b.position) return 1
+            return 0
+        }))
+        setF(true)
     }
-
-
-
+    useEffect(() => {
+        if (!f) {
+            setTimeout(sorting, 500)
+        }
+    }, [f])
+    console.log(phrase)
     const putWordResult = (id: number) => {
-        let dragWord = phrase.map(p => {
-            if (p.id === id&&p.status!=='result') {
+        phrase.map(p => {
+            if (p.id === id && p.status !== 'result') {
                 p.status = 'result'
                 setResultSentence([...resultSentence, p])
+                setPhrase(phrase.filter(p => {
+                    if (p.id !== id) return p
+                }))
             }
             return p
         })
-        setPhrase(dragWord)
         setAnswer({answer: '', error: false})
     }
 
     const putWordCloud = (id: number) => {
-        const setResult = (param: PhraseEnType)=> {
-            setResultSentence(resultSentence.filter(p => {
-                if (p.id !== id) return p
-            }))
-        }
-        putWord(id, 'cloud', setResult)
-        // let dragWord = phrase.map(p => {
-        //     if (p.id === id) {
-        //         p.status = 'cloud'
-        //
-        //         setCloudSentence([...cloudSentence, p])
-        //     }
-        //     return p
-        // })
-        // setPhrase(dragWord)
-        // setAnswer({answer: '', error: false})
+        resultSentence.map(p => {
+            if (p.id === id) {
+                p.status = 'cloud'
+                setPhrase([...phrase, p])
 
-
+                setResultSentence(resultSentence.filter(p => {
+                    if (p.id !== id) return p
+                }))
+            }
+            return p
+        })
+        setF(false)
+        setAnswer({answer: '', error: false})
     }
-    // const putWordCloud = (id: number) => {
-    //     let dragWord = phrase.map(p=> {
-    //         debugger
-    //         if (p.id === id && p.status === 'cloud') {
-    //             p.status = 'result'
-    //         } else if (p.id === id && p.status === 'result') {
-    //             p.status = 'cloud'
-    //         }
-    //         return p
-    //     })
-    //     setPhrase(dragWord)
-    // }
-    // console.log(phrase)
     return (
         <div className='App'>
             <div className='wrapper'>
@@ -146,17 +120,16 @@ function App() {
                     <h1>Translate this sentence</h1>
                     <Phrase text={phraseRus}/>
                     {/*@ts-ignore*/}
-                    <WordContext.Provider value={{putWordResult, putWordCloud} }>
+                    <WordContext.Provider value={{putWordResult, putWordCloud}}>
                         <DndProvider backend={HTML5Backend}>
                             {phrase.length !== 0
-                                ? <Test words={phrase} resultSentence={resultSentence}/>
+                                ? <Test words={phrase} resultSentence={resultSentence} f={f} setPhrase={setPhrase}/>
                                 : <div>Wait a minute</div>
                             }
                         </DndProvider>
                     </WordContext.Provider>
                     <CheckTest
                         answer={answer}
-                        // disabled={disabled}
                         setAnswer={setAnswer}
                         checkSentence={resultEn}
                         resultSentence={resultSentence}
@@ -168,3 +141,44 @@ function App() {
 }
 
 export default App;
+// let dragWord = phrase.map(p => {
+//     if (p.id === id) {
+//         p.status = 'cloud'
+//
+//         setCloudSentence([...cloudSentence, p])
+//     }
+//     return p
+// })
+// setPhrase(dragWord)
+// setAnswer({answer: '', error: false})
+// const putWordCloud = (id: number) => {
+//     let dragWord = phrase.map(p=> {
+//         debugger
+//         if (p.id === id && p.status === 'cloud') {
+//             p.status = 'result'
+//         } else if (p.id === id && p.status === 'result') {
+//             p.status = 'cloud'
+//         }
+//         return p
+//     })
+//     setPhrase(dragWord)
+// }
+// console.log(phrase)
+
+
+// const putWordResult = (id: number) => {
+//     let dragWord = phrase.map(p => {
+//         if (p.id === id && p.status === 'cloud') {
+//             p.status = 'result'
+//             setResultSentence([...resultSentence, p])
+//         } else if (p.id === id && p.status === 'result') {
+//             p.status = 'cloud'
+//             setResultSentence(resultSentence.filter(p => {
+//                 if (p.id !== id) return p
+//             }))
+//             setCloudSentence([...cloudSentence, p])
+//         }
+//         return p
+//     })
+//     setPhrase(dragWord)
+// }
