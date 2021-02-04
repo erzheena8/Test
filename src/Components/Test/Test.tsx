@@ -8,33 +8,34 @@ import {PutClouds} from "./SetOfWords/PutClouds";
 type TestPropsType = {
     words: Array<PhraseEnType>
     resultSentence: Array<PhraseEnType>
-    f: boolean
-    setPhrase:(phrase: Array<PhraseEnType>)=> void
-    // setSentence: (resultSentence: Array<string>) => void
-    // setDisabled: (disabled: boolean) => void
+    setPhrase: (phrase: Array<PhraseEnType>) => void
 }
 
 export const Test: React.FC<TestPropsType> = React.memo((
-    {words,
+    {
+        words,
         resultSentence,
         setPhrase,
-        // setSentence,
-        // setAnswer,
-        ...otherProps}) => {
-    const [wordsCloud, setWordsCloud] = useState<Array<PhraseEnType>>([])
-    // const [currentWordPut, setCurrentWordPut] = useState<PhraseEnType | null>(null)
-
+        ...otherProps
+    }) => {
+    const [coordinate, setCoordinate] = useState<{x: number, y:number}>({x:0, y:0})
 
     return (
-        <div className={classes.test}>
-            <PutResult words={resultSentence} />
+        <div className={classes.test} onMouseMove={(e)=> {
+            setCoordinate({x:e.pageX, y: e.pageY})
+        }}>
+            <PutResult words={resultSentence}/>
             <PutClouds words={words}/>
         </div>
     );
 
 })
 
-{/*<PutWordsContainer currentValue={currentWordCloud ? currentWordCloud : null} setCurrentWord={setCurrentWordPut}*/}
-{/*          setSentence={setSentence} setAnswer={setAnswer} {...otherProps}/>*/}
-{/*<CloudsWordsContainer words={words} setCurrentWord={setCurrentWordCloud} currentValue={currentWordPut}*/}
-{/*             setAnswer={setAnswer} currentWordCloud={currentWordCloud} pageY={pageY}/>*/}
+{/*<PutWordsContainer currentValue={currentWordCloud ? currentWordCloud : null} setCurrentWord={setCurrentWordPut}*/
+}
+{/*          setSentence={setSentence} setAnswer={setAnswer} {...otherProps}/>*/
+}
+{/*<CloudsWordsContainer words={words} setCurrentWord={setCurrentWordCloud} currentValue={currentWordPut}*/
+}
+{/*             setAnswer={setAnswer} currentWordCloud={currentWordCloud} pageY={pageY}/>*/
+}

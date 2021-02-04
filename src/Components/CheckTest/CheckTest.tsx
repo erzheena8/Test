@@ -19,13 +19,15 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
     }) => {
     const [disabled, setDisabled] = useState<boolean>(true)
     useEffect(()=> {
-        if (resultSentence.length === 0) setDisabled(true)
-        else setDisabled(false)
-    }, [resultSentence])
-
-    useEffect(()=> {
         if (!otherProps.answer.answer) setDisabled(false)
     }, [otherProps.answer])
+
+    useEffect(()=> {
+        if (resultSentence.length === 0) setDisabled(true)
+        else if (resultSentence.length > 0) setDisabled(false)
+    }, [resultSentence])
+
+
     const setValue = (check: boolean) => {
         check
             ? otherProps.setAnswer({answer: 'This is not true', error: true})
@@ -45,12 +47,11 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
             }
 
         }
+
         setValue(false)
-        setDisabled(false)
+        setDisabled(true)
         speechSynthesis.speak(new SpeechSynthesisUtterance(result.join(' ')))
     }
-
-
 
     return (
         <div className={classes.checkTest}>

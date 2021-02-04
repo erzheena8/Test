@@ -31,7 +31,7 @@ function App() {
 
     const [phrase, setPhrase] = useState<Array<PhraseEnType>>([]),
         [resultSentence, setResultSentence] = useState<Array<PhraseEnType>>([]),
-        [f, setF] = useState<boolean>(true),
+        [checkSorting, setCheckSorting] = useState<boolean>(true),
         [answer, setAnswer] = useState<SetAnswerType>({answer: '', error: false})
 
     const mixWords = (phrase: string, randomWords: Array<string>) => {
@@ -66,8 +66,8 @@ function App() {
         const len = phrase.length
         if (len > 0) {
             if (phrase[len - 2].position > phrase[len - 1].position) {
-                setF(false)
-            } else setF(true)
+                setCheckSorting(false)
+            } else setCheckSorting(true)
         }
     }, [phrase])
     const sorting = () => {
@@ -76,14 +76,13 @@ function App() {
             if (a.position > b.position) return 1
             return 0
         }))
-        setF(true)
+        setCheckSorting(true)
     }
     useEffect(() => {
-        if (!f) {
-            setTimeout(sorting, 500)
+        if (!checkSorting) {
+            setTimeout(sorting, 400)
         }
-    }, [f])
-    console.log(phrase)
+    }, [checkSorting])
     const putWordResult = (id: number) => {
         phrase.map(p => {
             if (p.id === id && p.status !== 'result') {
@@ -110,7 +109,7 @@ function App() {
             }
             return p
         })
-        setF(false)
+        setCheckSorting(false)
         setAnswer({answer: '', error: false})
     }
     return (
@@ -123,7 +122,7 @@ function App() {
                     <WordContext.Provider value={{putWordResult, putWordCloud}}>
                         <DndProvider backend={HTML5Backend}>
                             {phrase.length !== 0
-                                ? <Test words={phrase} resultSentence={resultSentence} f={f} setPhrase={setPhrase}/>
+                                ? <Test words={phrase} resultSentence={resultSentence} setPhrase={setPhrase}/>
                                 : <div>Wait a minute</div>
                             }
                         </DndProvider>
