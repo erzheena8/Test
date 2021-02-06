@@ -1,9 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, Component} from 'react'
 import classes from './PutClouds.module.sass'
 import {PhraseEnType, WordContext} from '../../../App'
-import {DropTarget, useDrop} from 'react-dnd';
-import {ItemType} from "../../../utils/item";
-import {Cloud} from "../Cloud/Cloud";
+import {useDrop} from 'react-dnd';
+import {ItemType} from '../../../utils/item';
+import { CloudContainer, ItemDragType} from '../Cloud/Cloud';
+import FlipMove from 'react-flip-move';
 
 
 type PutCloudsPropsType = {
@@ -22,27 +23,21 @@ export const PutClouds: React.FC<PutCloudsPropsType> =
 
         const [{isOver}, drop] = useDrop({
             accept: ItemType.WORD,
-            //@ts-ignore
-            drop: (item, monitor) => putWordCloud(item.id),
+            drop: (item: ItemDragType, monitor) => putWordCloud && putWordCloud(item.id),
             collect: monitor => ({
                 isOver: !!monitor.isOver()
             })
         })
 
-
-
-
         return (
             <div className={classes.clouds} ref={drop}>
+                <FlipMove className={classes.flipContainer}>
                 {
-                    words.filter(w => {
-                        if (w.status === 'cloud') return w
+                    words.map(w => {
+                        return <CloudContainer key={w.id} id={w.id} word={w.word}/>
                     })
-                        .map(w => {
-                            return <Cloud key={w.id} id={w.id}>{w.word}</Cloud>
-                        })
                 }
-            </div>
+                </FlipMove>
+             </div>
         );
-
     }

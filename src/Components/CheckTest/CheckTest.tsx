@@ -19,19 +19,24 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
     }) => {
     const [disabled, setDisabled] = useState<boolean>(true)
     useEffect(()=> {
-        if (!otherProps.answer.answer) setDisabled(false)
+        if (!otherProps.answer.answer)
+            if (resultSentence.length > 0) {
+                setDisabled(false)
+            }
     }, [otherProps.answer])
 
     useEffect(()=> {
-        if (resultSentence.length === 0) setDisabled(true)
-        else if (resultSentence.length > 0) setDisabled(false)
+        if (resultSentence.length === 0) {
+            setDisabled(true)
+        }
+        else {
+            setDisabled(false)
+        }
     }, [resultSentence])
-
-
     const setValue = (check: boolean) => {
         check
-            ? otherProps.setAnswer({answer: 'This is not true', error: true})
-            : otherProps.setAnswer({answer: 'Correct', error: false})
+            ? otherProps.setAnswer({answer: 'Something wrong!', error: true})
+            : otherProps.setAnswer({answer: 'Correct!', error: false})
         setDisabled(true)
     }
     const checkResult = () => {
@@ -45,9 +50,7 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
                 setValue(true)
                 return
             }
-
         }
-
         setValue(false)
         setDisabled(true)
         speechSynthesis.speak(new SpeechSynthesisUtterance(result.join(' ')))
@@ -60,7 +63,7 @@ export const CheckTest: React.FC<CheckTestPropsType> = React.memo((
                 {otherProps.answer.answer}
             </div>}
             <div className={classes.buttonCheck}>
-                <button onClick={checkResult} disabled={disabled}>
+                <button onClick={checkResult} disabled={disabled} >
                     Check
                 </button>
             </div>

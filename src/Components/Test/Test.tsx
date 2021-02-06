@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import classes from './Test.module.sass'
-import {PhraseEnType} from "../../App";
-import {PutResult} from "./ResultPhrase/PutResult";
-import {PutClouds} from "./SetOfWords/PutClouds";
+import {PhraseEnType} from '../../App';
+import {PutResult} from './ResultPhrase/PutResult';
+import {PutClouds} from './SetOfWords/PutClouds';
 
 
 type TestPropsType = {
@@ -18,24 +18,12 @@ export const Test: React.FC<TestPropsType> = React.memo((
         setPhrase,
         ...otherProps
     }) => {
-    const [coordinate, setCoordinate] = useState<{x: number, y:number}>({x:0, y:0})
 
     return (
-        <div className={classes.test} onMouseMove={(e)=> {
-            setCoordinate({x:e.pageX, y: e.pageY})
-        }}>
+        <div className={classes.test}>
             <PutResult words={resultSentence}/>
             <PutClouds words={words}/>
         </div>
     );
 
 })
-
-{/*<PutWordsContainer currentValue={currentWordCloud ? currentWordCloud : null} setCurrentWord={setCurrentWordPut}*/
-}
-{/*          setSentence={setSentence} setAnswer={setAnswer} {...otherProps}/>*/
-}
-{/*<CloudsWordsContainer words={words} setCurrentWord={setCurrentWordCloud} currentValue={currentWordPut}*/
-}
-{/*             setAnswer={setAnswer} currentWordCloud={currentWordCloud} pageY={pageY}/>*/
-}
